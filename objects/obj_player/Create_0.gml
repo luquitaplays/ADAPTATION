@@ -12,7 +12,6 @@ vel_muda_dir = mc_vel_muda_dir;
 right = false;
 left = false;
 jump = false;
-jump_r = false;
 
 right_escolhido = false;
 left_escolhido  = false;
@@ -133,7 +132,6 @@ uza_imputs = function()
     right = keyboard_check(right_escolhido);
     left = keyboard_check(left_escolhido);
     jump = keyboard_check_pressed(jump_escolhido);
-    jump_r = keyboard_check_released(vk_space);
 }
 
 //aplicando as velocidades
@@ -451,13 +449,6 @@ estado_pulando = function()
     else // se eu n estiver encostando no chao e estiver subindo
     {
         troca_sprite(spr_player_jump);
-        
-        //se eu soltar o botão de pulo
-        if (jump_r)
-        {
-            //corto velv pela metade
-            velv /= 2;
-        }
     }
     
     //se eu colidir com dano
