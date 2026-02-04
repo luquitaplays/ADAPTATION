@@ -7,35 +7,50 @@ velv = 0;
 mc_vel_muda_dir_ar = 0.035;
 mc_vel_muda_dir = 0.1;
 vel_muda_dir = mc_vel_muda_dir;
+
 //teclas
 right = false;
 left = false;
 jump = false;
+jump_r = false;
 
 right_escolhido = false;
 left_escolhido  = false;
 jump_escolhido  = false;
+
 //checar o chao
 chao = false;
 parede_dir = 0;
 parede_esq = 0;
+
 //checar o teto
 teto = false;
+begin_caindo = false;
+
 //gravidade
 mc_grav = 0.15;
 grav = mc_grav;
+
 //força do meu pulo
 forca_pulo = 3.3;
+
 //o quão rapido eu posso ir verticalmente
 max_velv = 12;
+
 //janela de variaveis
 view_player = noone;
+
 //variavel da direcao do player
 dir = dir_inicial;
 
+//staticas
 uma_vez = true;
 uma_vez_encosta = true;
 uma_vez_reset = true;
+
+//coyote time
+coyote_espera = 6;
+coyote_timer = coyote_espera;
 
 //variavel com as minhas colisoes
 //pegando tiles
@@ -118,6 +133,7 @@ uza_imputs = function()
     right = keyboard_check(right_escolhido);
     left = keyboard_check(left_escolhido);
     jump = keyboard_check_pressed(jump_escolhido);
+    jump_r = keyboard_check_released(vk_space);
 }
 
 //aplicando as velocidades
@@ -238,6 +254,16 @@ checa_chao = function()
     //paredes
     parede_dir = place_meeting(x + 1, y, colizion);
     parede_esq = place_meeting(x - 1, y, colizion);
+}
+
+//coyote time metodo
+coyote_time = function()
+{
+    if (!chao) 
+    {
+        if (coyote_timer > 0) coyote_timer--;
+    }
+    else coyote_timer = coyote_espera;
 }
 
 //animaçoes
@@ -364,6 +390,9 @@ estado_pulando = function()
     {
         efeito_set_mola(1.5, 0.7);
         estado = estado_parado;
+        
+        begin_caindo = false;
+        
         //se eu pular
         if (jump)
         {
@@ -381,10 +410,36 @@ estado_pulando = function()
         //zerando velv
         velv = 0;
     }
+    
+    
     //se eu n estiver encostando no chao e estiver caindo
-    if (velv > 0)
+    if (velv >= 0)
     {
-        mudando_transicao_de_sprites(transicao_pulo_pra_queda);
+        //se é a primeira vez caindo
+        if (!begin_caindo)
+        {
+            //faz a virada
+            mudando_transicao_de_sprites(transicao_pulo_pra_queda);
+            
+            //reseta valores
+            spr_atual = 0;
+            begin_caindo = true;
+        }
+        
+        //COYOTE TIME
+        if (jump && coyote_timer)
+        {
+            //fazendo ele pular
+            velv = -forca_pulo;
+            //efeitos
+            efeito_set_mola(0.7, 1.5);
+            audio_play_sound(snd_pulo, 0, 0);
+            //vai para o estado pulando
+            estado = estado_pulando;
+            //garantindo que vou fazer apenas uma vez
+            coyote_timer = 0;
+        }
+        
         transicao_de_sprites();
         
         if (parede_dir || parede_esq)
@@ -393,11 +448,19 @@ estado_pulando = function()
             velv = 0;
         }
     }
-    //se eu n estiver encostando no chao e estiver subindo
-    else
+    else // se eu n estiver encostando no chao e estiver subindo
     {
         troca_sprite(spr_player_jump);
+        
+        //se eu soltar o botão de pulo
+        if (jump_r)
+        {
+            //corto velv pela metade
+            velv /= 2;
+        }
     }
+    
+    //se eu colidir com dano
     if (place_meeting(x, y, colizion_dano))
     {
         estado = estado_morrendo;

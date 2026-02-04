@@ -7,6 +7,9 @@ associa_vel();
 //passando de level
 pega_rubi();
 
+//qol
+coyote_time();
+
 //verifica se morreu
 morri();
 
@@ -22,7 +25,7 @@ estado();
 
 if (keyboard_check_pressed(ord("R")) && instance_exists(obj_rubi) 
     && estado != estado_morrendo && uma_vez_reset)
-    {
-        cria_transicao_inicia(room);
-        uma_vez_reset = false;   
-    }
+{
+    cria_transicao_inicia(room);
+    uma_vez_reset = false;   
+}
