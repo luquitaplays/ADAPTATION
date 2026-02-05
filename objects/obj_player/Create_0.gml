@@ -48,7 +48,7 @@ uma_vez_encosta = true;
 uma_vez_reset = true;
 
 //coyote time
-coyote_espera = 6;
+coyote_espera = 8;
 coyote_timer = coyote_espera;
 
 //variavel com as minhas colisoes

@@ -23,6 +23,9 @@ efeito_branco_lerp(0.1);
 //atualizando o estado
 estado();
 
+//full screen
+if (keyboard_check_pressed(vk_f11)) window_set_fullscreen(!window_get_fullscreen());
+
 if (keyboard_check_pressed(ord("R")) && instance_exists(obj_rubi) 
     && estado != estado_morrendo && uma_vez_reset)
 {
