@@ -6,6 +6,8 @@ global.j_name = false;
 global.level = 0;
 global.todos_levels = 10;
 
+global.ja_estive_aq = false;
+
 global.nome_imputs =
 [
     "A", "B", "C", "D", "E", "F", "G",

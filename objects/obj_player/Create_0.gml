@@ -84,6 +84,15 @@ scribble_anim_wobble(30, 0.2);
 
 inicio_aleatorio = function()
 {
+    if (global.ja_estive_aq == true)
+    {
+        // Guarda os códigos dos inputs escolhidos
+        right_escolhido = inputs_possiveis[global.r_name];
+        left_escolhido  = inputs_possiveis[global.l_name];
+        jump_escolhido  = inputs_possiveis[global.j_name];
+        exit;
+    }
+    
     // Verifica se a room atual é rm_explication
     if (room == rm_explication || room == rm_final)
     {
@@ -199,6 +208,7 @@ pega_rubi = function()
     if (!instance_exists(obj_rubi) && room != rm_final && estado != estado_morrendo && uma_vez)
     {
         cria_transicao_inicia(room_next(room));
+        global.ja_estive_aq = false;
         global.level++;
         uma_vez = false;
     }
@@ -234,6 +244,7 @@ morri = function()
     if (place_meeting(x, y, colizion_dano) && uma_vez_encosta)
     {
         cria_transicao_inicia(room);
+        global.ja_estive_aq = true;
         audio_play_sound(snd_morre, 0, 0);
         uma_vez_encosta = false;
     }

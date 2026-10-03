@@ -30,5 +30,6 @@ if (keyboard_check_pressed(ord("R")) && instance_exists(obj_rubi)
     && estado != estado_morrendo && uma_vez_reset)
 {
     cria_transicao_inicia(room);
+    global.ja_estive_aq = true;
     uma_vez_reset = false;   
 }
